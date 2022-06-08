@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/termische_comfort.iml" filepath="$PROJECT_DIR$/.idea/termische_comfort.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/thermal_comfort.iml" filepath="$PROJECT_DIR$/.idea/thermal_comfort.iml" />
     </modules>
   </component>
 </project>
