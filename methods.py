@@ -5,16 +5,24 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
+# Even if you don't use them, you still have to import
+import random
+import numpy as np
+
+
+
+
+
 
 class Net(nn.Module):
     def __init__(self, device=None, dtype=None, input_size=1):
         self.device = device
         self.dtype = dtype
         super(Net, self).__init__()
-        self.fc1 = nn.Linear(input_size, 6, device=self.device, dtype=self.dtype)
-        self.fc2 = nn.Linear(6, 10, device=self.device, dtype=self.dtype)
-        self.fc3 = nn.Linear(10, 4, device=self.device, dtype=self.dtype)
-        self.fc4 = nn.Linear(4, 1, device=self.device, dtype=self.dtype)
+        self.fc1 = nn.Linear(input_size, 9, device=self.device, dtype=self.dtype)
+        self.fc2 = nn.Linear(9, 6, device=self.device, dtype=self.dtype)
+        self.fc3 = nn.Linear(6, 3, device=self.device, dtype=self.dtype)
+        self.fc4 = nn.Linear(3, 1, device=self.device, dtype=self.dtype)
 
     def forward(self, x):
         x = F.relu(self.fc1(x.float()))
@@ -36,7 +44,6 @@ class NN:
         return list(set(self.model.parameters()))
 
     def predict(self, x):
-        x = torch.tensor(x, device=self.device, dtype=self.dtype).reshape(-1, self.input_size)
         return self.model(x)
 
     def calculate_regularization_loss(self):
@@ -70,9 +77,7 @@ class Linear:
         return list(set(self.model.parameters()))
 
     def predict(self, x):
-        x = torch.tensor(x, device=self.device, dtype=self.dtype).reshape(-1, self.input_size)
-        R = self.model(x)
-        return R
+        return self.model(x)
 
     def calculate_regularization_loss(self):
         return torch.tensor(0.0, device=self.device, dtype=self.dtype)
