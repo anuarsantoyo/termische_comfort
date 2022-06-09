@@ -19,16 +19,16 @@ class Net(nn.Module):
         self.device = device
         self.dtype = dtype
         super(Net, self).__init__()
-        self.fc1 = nn.Linear(input_size, 9, device=self.device, dtype=self.dtype)
-        self.fc2 = nn.Linear(9, 6, device=self.device, dtype=self.dtype)
-        self.fc3 = nn.Linear(6, 3, device=self.device, dtype=self.dtype)
-        self.fc4 = nn.Linear(3, 1, device=self.device, dtype=self.dtype)
+        self.fc1 = nn.Linear(input_size, 6, device=self.device, dtype=self.dtype)
+        self.fc2 = nn.Linear(6, 1, device=self.device, dtype=self.dtype)
+#        self.fc3 = nn.Linear(6, 3, device=self.device, dtype=self.dtype)
+#        self.fc4 = nn.Linear(3, 1, device=self.device, dtype=self.dtype)
 
     def forward(self, x):
-        x = F.relu(self.fc1(x.float()))
+        x = F.relu(self.fc1(x))
         x = F.relu(self.fc2(x))
-        x = F.relu(self.fc3(x))
-        x = self.fc4(x)
+        #x = F.relu(self.fc3(x))
+        #x = self.fc4(x)
         return F.relu(x)
 
 
