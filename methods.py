@@ -4,6 +4,7 @@ import pandas as pd
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+from sklearn import svm
 
 # Even if you don't use them, you still have to import
 import random
@@ -20,20 +21,21 @@ class Net(nn.Module):
         self.dtype = dtype
         super(Net, self).__init__()
         self.fc1 = nn.Linear(input_size, 6, device=self.device, dtype=self.dtype)
-        self.fc2 = nn.Linear(6, 1, device=self.device, dtype=self.dtype)
-#        self.fc3 = nn.Linear(6, 3, device=self.device, dtype=self.dtype)
-#        self.fc4 = nn.Linear(3, 1, device=self.device, dtype=self.dtype)
+        self.fc2 = nn.Linear(6, 6, device=self.device, dtype=self.dtype)
+        self.fc3 = nn.Linear(6, 3, device=self.device, dtype=self.dtype)
+        self.fc4 = nn.Linear(3, 1, device=self.device, dtype=self.dtype)
 
     def forward(self, x):
         x = F.relu(self.fc1(x))
         x = F.relu(self.fc2(x))
-        #x = F.relu(self.fc3(x))
-        #x = self.fc4(x)
+        x = F.relu(self.fc3(x))
+        x = self.fc4(x)
         return F.relu(x)
 
 
 class NN:
     def __init__(self, n_observations=None, device=None, dtype=None, input_size=1):
+        self.optimizes = True
         self.input_size = input_size
         self.device = device
         self.dtype = dtype
@@ -67,6 +69,7 @@ class LinearNet(nn.Module):
 
 class Linear:
     def __init__(self, n_observations=None, device=None, dtype=None, input_size=1):
+        self.optimizes = True
         self.input_size = input_size
         self.device = device
         self.dtype = dtype
@@ -82,3 +85,22 @@ class Linear:
     def calculate_regularization_loss(self):
         return torch.tensor(0.0, device=self.device, dtype=self.dtype)
 
+class SVM:
+    def __init__(self, device=None, dtype=None, input_size=1):
+        self.optimizes = False
+        self.input_size = input_size
+        self.device = device
+        self.dtype = dtype
+        self.model = svm.SVR()
+
+    def get_parameters(self):
+        return None
+
+    def fit(self, X, y):
+        return self.model.fit(X, y)
+
+    def predict(self, x):
+        return self.model.predict(x)
+
+    def calculate_regularization_loss(self):
+        return torch.tensor(0.0, device=self.device, dtype=self.dtype)
