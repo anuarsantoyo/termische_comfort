@@ -16,10 +16,12 @@ Goal: Test several models that predict thermal comfort based on Feature vector F
 - SVM
 
 ## Cluster:
-Cluster data in k groups and see if groups found correspond to labels, if so describe groups found and use them to label new data
+Cluster data in k groups and see if groups found correspond to label, if so describe groups found and use them to label
+new data
 - k means
 - nnmf
 - Gaussian mixture model
 
 ## Mean Votation Polyfit:
-Use rolling discrete hypercube to calculate mean comfort (MC) within hypercube on discrete points throughout feature space V. Fit polynome so that it predicts F -> MC 
+Use rolling discrete hypercube to calculate mean comfort (MC) within hypercube on discrete points throughout feature 
+space V. Fit polynomial (or kernel approach) so that it predicts F -> MC 
