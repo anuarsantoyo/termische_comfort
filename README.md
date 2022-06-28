@@ -13,7 +13,7 @@ Goal: Test several models that predict thermal comfort based on Feature vector F
 - NN (implemented)
 - Random Forest
 - Adaboost
-- SVM
+- SVM (implemented)
 
 ## Cluster:
 Cluster data in k groups and see if groups found correspond to label, if so describe groups found and use them to label
