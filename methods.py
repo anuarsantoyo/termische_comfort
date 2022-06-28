@@ -63,7 +63,9 @@ class LinearNet(nn.Module):
 
 
 class NNClassifier:
-    def __init__(self, n_observations=None, device=None, dtype=None, input_size=1):
+    def __init__(self, n_observations=None, device=None, dtype=None, input_size=1, class_weights=None):
+        self.optimizes = True
+        self.class_weights = class_weights
         self.type = "classifier"
         self.input_size = input_size
         self.device = device
@@ -71,8 +73,8 @@ class NNClassifier:
         self.n_observations = n_observations
         self.model = NetClasifier(device=self.device, dtype=self.dtype, input_size=self.input_size)
 
-    def criterion(self, class_weights):
-        return nn.CrossEntropyLoss(weight=class_weights)
+    def criterion(self):
+        return nn.CrossEntropyLoss(weight=self.class_weights)
 
     def get_parameters(self):
         return list(set(self.model.parameters()))
@@ -89,7 +91,8 @@ class NNClassifier:
 
 
 class NNPredictor:
-    def __init__(self, n_observations=None, device=None, dtype=None, input_size=1):
+    def __init__(self, n_observations=None, device=None, dtype=None, input_size=1, class_weights=None):
+        self.optimizes = True
         self.type = "predictor"
         self.input_size = input_size
         self.device = device
@@ -114,7 +117,8 @@ class NNPredictor:
 
 
 class Linear:
-    def __init__(self, n_observations=None, device=None, dtype=None, input_size=1):
+    def __init__(self, n_observations=None, device=None, dtype=None, input_size=1, class_weights=None):
+        self.optimizes = True
         self.type = "predictor"
         self.input_size = input_size
         self.device = device
@@ -136,12 +140,13 @@ class Linear:
 
 
 class SVM:
-    def __init__(self, device=None, dtype=None, input_size=1):
+    def __init__(self, device=None, dtype=None, input_size=1, class_weights=None):
+        self.class_weights = class_weights
         self.optimizes = False
         self.input_size = input_size
         self.device = device
         self.dtype = dtype
-        self.model = svm.SVR()
+        self.model = svm.SVC(kernel='linear', class_weight=self.class_weights)
 
     def get_parameters(self):
         return None

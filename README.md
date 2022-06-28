@@ -11,7 +11,7 @@ Goal: Test several models that predict thermal comfort based on Feature vector F
 
 ## Clasifier: F -> {-1, 0, 1}
 - NN (implemented)
-- Random Forest
+- Random Forest (implemented)
 - Adaboost
 - SVM (implemented)
 
