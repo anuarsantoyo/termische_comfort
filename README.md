@@ -27,4 +27,8 @@ Use rolling discrete hypercube to calculate mean comfort (MC) within hypercube o
 space V. Fit polynomial (or kernel approach) so that it predicts F -> MC 
  todo:
 - ver paper relacionados a buses
-- 
+
+# Extra horas 6
+
+
+
