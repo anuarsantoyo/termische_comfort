@@ -5,7 +5,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from sklearn import svm
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier
 
 # Even if you don't use them, you still have to import
 import random
@@ -146,7 +146,7 @@ class SVM:
         self.input_size = input_size
         self.device = device
         self.dtype = dtype
-        self.model = svm.SVC(kernel=kernel, C=C,gamma=gamma,class_weight='balanced', max_iter=100000) # {'linear', 'poly', 'rbf', 'sigmoid', 'precomputed'}
+        self.model = svm.SVC(kernel=kernel, C=C, gamma=gamma, class_weight='balanced', max_iter=100000) # {'linear', 'poly', 'rbf', 'sigmoid', 'precomputed'}
 
     def get_parameters(self):
         return None
@@ -166,6 +166,26 @@ class RF:
         self.input_size = input_size
         self.dtype = dtype
         self.model = RandomForestClassifier()
+
+    def get_parameters(self):
+        return None
+
+    def fit(self, X, y):
+        return self.model.fit(X, y)
+
+    def predict(self, x):
+        return self.model.predict(x)
+
+    def calculate_regularization_loss(self):
+        return torch.tensor(0.0, device=self.device, dtype=self.dtype)
+
+
+class AdaBoost:
+    def __init__(self, device=None, dtype=None, input_size=1, class_weights=None):
+        self.optimizes = False
+        self.input_size = input_size
+        self.dtype = dtype
+        self.model = AdaBoostClassifier()
 
     def get_parameters(self):
         return None
