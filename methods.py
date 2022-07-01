@@ -18,17 +18,17 @@ class Net(nn.Module):
         self.device = device
         self.dtype = dtype
         super(Net, self).__init__()
-        self.fc1 = nn.Linear(input_size, 50, device=self.device, dtype=self.dtype)
-        self.fc2 = nn.Linear(50, 30, device=self.device, dtype=self.dtype)
-        self.fc3 = nn.Linear(30, 3, device=self.device, dtype=self.dtype)
-        self.fc4 = nn.Linear(3, 1, device=self.device, dtype=self.dtype)
+        self.fc1 = nn.Linear(input_size, input_size, device=self.device, dtype=self.dtype)
+        self.fc2 = nn.Linear(input_size, 4, device=self.device, dtype=self.dtype)
+        #self.fc3 = nn.Linear(30, 3, device=self.device, dtype=self.dtype)
+        self.fc4 = nn.Linear(4, 1, device=self.device, dtype=self.dtype)
 
     def forward(self, x):
         x = F.relu(self.fc1(x))
         x = F.relu(self.fc2(x))
-        x = F.relu(self.fc3(x))
+        #x = F.relu(self.fc3(x))
         x = self.fc4(x)
-        return F.relu(x)
+        return torch.sigmoid(x)*2
 
 
 class NetClassifier(nn.Module):
@@ -63,14 +63,13 @@ class LinearNet(nn.Module):
 
 
 class NNClassifier:
-    def __init__(self, n_observations=None, device=None, dtype=None, input_size=1, class_weights=None):
+    def __init__(self, device=None, dtype=None, input_size=1, class_weights=None):
         self.optimizes = True
         self.class_weights = class_weights
         self.type = "classifier"
         self.input_size = input_size
         self.device = device
         self.dtype = dtype
-        self.n_observations = n_observations
         self.model = NetClassifier(device=self.device, dtype=self.dtype, input_size=self.input_size)
 
     def criterion(self):
@@ -91,13 +90,12 @@ class NNClassifier:
 
 
 class NNPredictor:
-    def __init__(self, n_observations=None, device=None, dtype=None, input_size=1, class_weights=None):
+    def __init__(self, device=None, dtype=None, input_size=1, class_weights=None):
         self.optimizes = True
         self.type = "predictor"
         self.input_size = input_size
         self.device = device
         self.dtype = dtype
-        self.n_observations = n_observations
         self.model = Net(device=self.device, dtype=self.dtype, input_size=self.input_size)
 
     def criterion(self):
@@ -116,17 +114,16 @@ class NNPredictor:
         return reg_loss
 
 
-class Linear:
-    def __init__(self, n_observations=None, device=None, dtype=None, input_size=1, class_weights=None):
+class LinearPredictor:
+    def __init__(self, device=None, dtype=None, input_size=1, class_weights=None):
         self.optimizes = True
         self.type = "predictor"
         self.input_size = input_size
         self.device = device
         self.dtype = dtype
-        self.n_observations = n_observations
         self.model = LinearNet(device=self.device, dtype=self.dtype, input_size=self.input_size)
 
-    def criterion(self, class_weights=None):
+    def criterion(self):
         return nn.MSELoss()
 
     def get_parameters(self):
@@ -140,13 +137,14 @@ class Linear:
 
 
 class SVM:
-    def __init__(self, device=None, dtype=None, input_size=1, class_weights=None, kernel='rbf', C=1.0, gamma=0.0):
+    def __init__(self, device=None, dtype=None, input_size=1, class_weights=None):
         self.class_weights = class_weights
         self.optimizes = False
         self.input_size = input_size
         self.device = device
         self.dtype = dtype
-        self.model = svm.SVC(kernel=kernel, C=C, gamma=gamma, class_weight='balanced', max_iter=100000) # {'linear', 'poly', 'rbf', 'sigmoid', 'precomputed'}
+        self.kernel = "linear"
+        self.model = svm.SVC(kernel=self.kernel, class_weight='balanced') # {'linear', 'poly', 'rbf', 'sigmoid', 'precomputed'}
 
     def get_parameters(self):
         return None
@@ -198,3 +196,6 @@ class AdaBoost:
 
     def calculate_regularization_loss(self):
         return torch.tensor(0.0, device=self.device, dtype=self.dtype)
+
+def method_classes_list():
+    return [NNClassifier, NNPredictor, LinearPredictor, SVM, RF, AdaBoost]
