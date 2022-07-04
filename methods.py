@@ -136,7 +136,7 @@ class LinearPredictor:
         return torch.tensor(0.0, device=self.device, dtype=self.dtype)
 
 
-class SVM:
+class SVMLinear:
     def __init__(self, device=None, dtype=None, input_size=1, class_weights=None):
         self.class_weights = class_weights
         self.optimizes = False
@@ -158,12 +158,79 @@ class SVM:
     def calculate_regularization_loss(self):
         return torch.tensor(0.0, device=self.device, dtype=self.dtype)
 
+
+class SVMPoly:
+    def __init__(self, device=None, dtype=None, input_size=1, class_weights=None):
+        self.class_weights = class_weights
+        self.optimizes = False
+        self.input_size = input_size
+        self.device = device
+        self.dtype = dtype
+        self.kernel = "poly"
+        self.model = svm.SVC(kernel=self.kernel, class_weight='balanced') # {'linear', 'poly', 'rbf', 'sigmoid', 'precomputed'}
+
+    def get_parameters(self):
+        return None
+
+    def fit(self, X, y):
+        return self.model.fit(X, y)
+
+    def predict(self, x):
+        return self.model.predict(x)
+
+    def calculate_regularization_loss(self):
+        return torch.tensor(0.0, device=self.device, dtype=self.dtype)
+
+class SVMRbf:
+    def __init__(self, device=None, dtype=None, input_size=1, class_weights=None):
+        self.class_weights = class_weights
+        self.optimizes = False
+        self.input_size = input_size
+        self.device = device
+        self.dtype = dtype
+        self.kernel = "rbf"
+        self.model = svm.SVC(kernel=self.kernel, class_weight='balanced') # {'linear', 'poly', 'rbf', 'sigmoid', 'precomputed'}
+
+    def get_parameters(self):
+        return None
+
+    def fit(self, X, y):
+        return self.model.fit(X, y)
+
+    def predict(self, x):
+        return self.model.predict(x)
+
+    def calculate_regularization_loss(self):
+        return torch.tensor(0.0, device=self.device, dtype=self.dtype)
+
+class SVMSigmoid:
+    def __init__(self, device=None, dtype=None, input_size=1, class_weights=None):
+        self.class_weights = class_weights
+        self.optimizes = False
+        self.input_size = input_size
+        self.device = device
+        self.dtype = dtype
+        self.kernel = "sigmoid"
+        self.model = svm.SVC(kernel=self.kernel, class_weight='balanced') # {'linear', 'poly', 'rbf', 'sigmoid', 'precomputed'}
+
+    def get_parameters(self):
+        return None
+
+    def fit(self, X, y):
+        return self.model.fit(X, y)
+
+    def predict(self, x):
+        return self.model.predict(x)
+
+    def calculate_regularization_loss(self):
+        return torch.tensor(0.0, device=self.device, dtype=self.dtype)
+
 class RF:
     def __init__(self, device=None, dtype=None, input_size=1, class_weights=None):
         self.optimizes = False
         self.input_size = input_size
         self.dtype = dtype
-        self.model = RandomForestClassifier()
+        self.model = RandomForestClassifier(class_weight="balanced")
 
     def get_parameters(self):
         return None
@@ -198,4 +265,4 @@ class AdaBoost:
         return torch.tensor(0.0, device=self.device, dtype=self.dtype)
 
 def method_classes_list():
-    return [NNClassifier, NNPredictor, LinearPredictor, SVM, RF, AdaBoost]
+    return [LinearPredictor, SVMLinear, SVMPoly, SVMRbf, SVMSigmoid, RF, AdaBoost, NNPredictor, NNClassifier]
