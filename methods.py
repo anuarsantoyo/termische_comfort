@@ -5,7 +5,8 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from sklearn import svm
-from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier
+from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier, GradientBoostingClassifier
+from sklearn.neighbors import KNeighborsClassifier
 
 # Even if you don't use them, you still have to import
 import random
@@ -38,7 +39,7 @@ class NetClassifier(nn.Module):
         super(NetClassifier, self).__init__()
         self.fc1 = nn.Linear(input_size, input_size, device=self.device, dtype=self.dtype)
         self.fc2 = nn.Linear(input_size, 10, device=self.device, dtype=self.dtype)
-        self.fc3 = nn.Linear(10, 3, device=self.device, dtype=self.dtype)
+        self.fc3 = nn.Linear(10, 2, device=self.device, dtype=self.dtype)
 
     def forward(self, x):
         x = F.relu(self.fc1(x))
@@ -264,5 +265,25 @@ class AdaBoost:
     def calculate_regularization_loss(self):
         return torch.tensor(0.0, device=self.device, dtype=self.dtype)
 
+
+class KNN:
+    def __init__(self, device=None, dtype=None, input_size=1, class_weights=None):
+        self.optimizes = False
+        self.input_size = input_size
+        self.dtype = dtype
+        self.model = KNeighborsClassifier()
+
+    def get_parameters(self):
+        return None
+
+    def fit(self, X, y):
+        return self.model.fit(X, y)
+
+    def predict(self, x):
+        return self.model.predict(x)
+
+    def calculate_regularization_loss(self):
+        return torch.tensor(0.0, device=self.device, dtype=self.dtype)
+
 def method_classes_list():
-    return [LinearPredictor, SVMLinear, SVMPoly, SVMRbf, SVMSigmoid, RF, AdaBoost, NNPredictor, NNClassifier]
+    return [LinearPredictor, SVMLinear, SVMPoly, SVMRbf, SVMSigmoid, RF, AdaBoost, NNPredictor, NNClassifier, KNN]
