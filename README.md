@@ -28,7 +28,7 @@ space V. Fit polynomial (or kernel approach) so that it predicts F -> MC
  todo:
 - ver paper relacionados a buses
 
-# Extra horas 6
+# Extra horas 12
 
 
 

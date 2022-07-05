@@ -38,7 +38,7 @@ class NetClassifier(nn.Module):
         super(NetClassifier, self).__init__()
         self.fc1 = nn.Linear(input_size, input_size, device=self.device, dtype=self.dtype)
         self.fc2 = nn.Linear(input_size, 10, device=self.device, dtype=self.dtype)
-        self.fc3 = nn.Linear(10, 2, device=self.device, dtype=self.dtype)
+        self.fc3 = nn.Linear(10, 3, device=self.device, dtype=self.dtype)
 
     def forward(self, x):
         x = F.relu(self.fc1(x))
